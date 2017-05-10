@@ -1,0 +1,44 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.Collections.Generic;
+
+public class player_bag_script : MonoBehaviour {
+    public int get_obj_number;
+    //新增一個List<T>
+    public List<Student> students_new = new List<Student>();
+    public int textr;
+    //設定一個結構
+    public struct Student
+    {
+    //我把這個當作素材編號
+        public int material_idnumber;
+    //我把這個當作擁有的素材量
+        public int material_amount;
+
+        public Student(int _material_idnumber,string _material_id, int _material_amount) {
+            this.material_idnumber = _material_idnumber;
+            this.material_amount = _material_amount;
+        }
+    };
+    //讓外部腳本執行然後獲取i值
+        public void get_a_material(int i) {
+        //指定value為索引代號並調查students_new陣列裡面等於i的material_idnumber代號給value
+        int value = students_new.FindIndex(x => x.material_idnumber == i);
+        Debug.Log(value);//測試看看
+        //如果是value值是-1那代表沒有找到該項目
+        if (value != -1)
+        {
+        //修改students_new.material_idnumber的值一定要在定一個結構體再指定回去
+            Student s = students_new[value];
+            s.material_amount++;
+            students_new[value] = s;
+            Debug.Log(students_new[value].material_amount);
+        }
+        else {
+  //如果找不到該項目新增一組新的結構陣列
+            students_new.Add(new Student() { material_idnumber = i, material_amount = 1 });
+
+        }
+    }
+}
