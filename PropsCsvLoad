@@ -1,0 +1,61 @@
+using UnityEngine;
+using System;
+using System.Collections.Generic;
+
+public class PropsCsvLoad
+{
+
+    public class PropsCsvtable
+    {
+        public int ID;        
+        public string ItemName;        //名子
+        public int level;              //物品等級
+        public int Stack;              //疊加最大數值
+        public string TextData;        //文字說明
+    }
+
+    static List<PropsCsvtable> PropsList = new List<PropsCsvtable>();
+    bool isLoaded = false;
+
+
+    public bool IsLoaded()
+    {
+        return isLoaded;
+    }
+
+    public List<PropsCsvtable> GetRowList()
+    {
+        return PropsList;
+    }
+
+    public static void PropsLoad()
+    {
+        TextAsset csv = Resources.Load<TextAsset>("Csv/ListProps");
+        PropsList.Clear();
+        string[][] grid = CsvParser2.Parse(csv.text);
+        for (int i = 1; i < grid.Length; i++)
+        {
+            PropsCsvtable row = new PropsCsvtable();
+            row.ID = Convert.ToInt32(grid[i][0]);
+            row.ItemName = grid[i][1];
+            row.level = Convert.ToInt32(grid[i][2]);
+            row.Stack = Convert.ToInt32(grid[i][3]);
+            row.TextData = grid[i][4];
+            PropsList.Add(row);
+        }
+        Debug.Log("PropsLoad" + NumRows());//是否讀取成功
+    }
+
+    public static int NumRows()
+    {
+        return PropsList.Count;
+    }
+
+    public static PropsCsvtable PropsGet(int i)
+    {
+        Debug.Log(PropsList.Count);
+        if (PropsList.Count <= i)
+            return null;
+        return PropsList[i];
+    }
+}
