@@ -1,0 +1,56 @@
+
+using System.Collections.Generic;
+using UnityEngine;
+
+public class SkillUpdateCD : MonoBehaviour {
+
+    public static Dictionary<int, float> SkillCDTime = new Dictionary<int, float>();
+
+    /// <summary>
+    /// 刷新CD時間
+    /// </summary>
+    void Update () {
+        //Debug.Log("Keys" + SkillCDTime.);
+        List<int> buffer = new List<int>(SkillCDTime.Keys);
+
+        foreach (int i in buffer)
+	    {
+            SkillCDTime[i] -= 1 * Time.deltaTime;
+	        if (SkillCDTime[i] <= 0) SkillCDTime.Remove(i);
+
+	    }
+
+	}
+    /// <summary>
+    /// 設置新的cd時間
+    /// </summary>
+    /// <param name="skillID"></param>
+    /// <param name="cdTime"></param>
+    public static void SetNewSkillCD(int skillID,float cdTime)
+    {
+        SkillCDTime.Add(skillID, cdTime);
+    }
+    /// <summary>
+    /// 獲取技能目前的CD等待時間
+    /// </summary>
+    /// <param name="skillID"></param>
+    /// <returns></returns>
+    public static float GetSkillCD(int skillID)
+    {
+        return SkillCDTime[skillID];
+    }
+    /// <summary>
+    /// 獲取當前使用的技能是否在CD
+    /// </summary>
+    /// <param name="skillID"></param>
+    /// <returns></returns>
+    public static bool GetSkillCDBool(int skillID)
+    {
+        float resource;
+        if (!SkillCDTime.TryGetValue(skillID, out resource))
+        {
+            return false;
+        }
+        return true;
+    }
+}
